@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 
 import { FuelsController } from '../fuels.controller';
 import { FuelsService } from '../fuels.service';
-import { Fuel } from '../entities';
 import { FuelsRepository, PricesRepository } from '../repositories';
 
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
