@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { FuelsRepository, PricesRepository } from './repositories';
+import { PricesRepository } from './repositories';
 import { QueryFuelPriceDto } from './dtos';
 
 @Injectable()
@@ -9,7 +9,6 @@ export class FuelsService {
   private readonly logger = new Logger(FuelsService.name);
 
   constructor(
-    private readonly fuelsRepository: FuelsRepository,
     private readonly pricesRepository: PricesRepository,
     private readonly configService: ConfigService,
   ) {}
