@@ -15,6 +15,7 @@ export class FuelsService {
 
   async getFuelPrices(query: QueryFuelPriceDto) {
     const date = this.getLastSaturday(query.date);
+
     this.pricesRepository.init().findByDate(date);
 
     if (query.code) {
@@ -25,20 +26,22 @@ export class FuelsService {
 
     const data = await this.pricesRepository.search(limit);
 
+    const updatedAt = (data[0] && data[0].publicationDate) || new Date();
+
     return {
       valid: true,
       data,
       meta: {
         source: 'https://micm.gob.do',
-        updatedAt: date,
-        week: 51,
+        updatedAt,
+        week: this.getDateWeekNumber(date),
+        year: this.getDateYear(date),
       },
     };
   }
 
-  private getLastSaturday(date: Date): Date {
+  private getLastSaturday(date: Date = new Date()): Date {
     const SATURDAY_WEEK_DAY = 6;
-    date = date || new Date();
 
     if (SATURDAY_WEEK_DAY === date.getDay()) {
       return date;
@@ -48,5 +51,22 @@ export class FuelsService {
     date.setDate(time);
 
     return date;
+  }
+
+  private getDateWeekNumber(date: Date = new Date()) {
+    const today = date;
+    const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+    const pastDaysOfYear =
+      (today.valueOf() - firstDayOfYear.valueOf()) / 86400000;
+
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+  }
+
+  private getDateYear(date: Date = new Date()) {
+    return date.getFullYear();
+  }
+
+  private getLastUpdatedDate(date: Date = new Date()) {
+    return new Date(date).toISOString();
   }
 }

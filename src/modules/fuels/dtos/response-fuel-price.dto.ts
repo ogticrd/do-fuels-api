@@ -41,6 +41,7 @@ class PriceDto {
   @Expose()
   @ApiProperty()
   @IsDateString()
+  @Transform(({ value }) => new Date(value).toISOString())
   date: Date;
 }
 
@@ -54,6 +55,7 @@ class FuelPriceMetaDto {
   @Expose()
   @ApiProperty()
   @IsDateString()
+  @Transform(({ value }) => new Date(value).toISOString())
   updatedAt: Date;
 
   @Expose()
