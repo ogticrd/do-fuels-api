@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { PricesRepository } from './repositories';
 import { QueryFuelPriceDto } from './dtos';
+import { DateUtil } from '@utils/date.util';
 
 @Injectable()
 export class FuelsService {
@@ -14,7 +15,7 @@ export class FuelsService {
   ) {}
 
   async getFuelPrices(query: QueryFuelPriceDto) {
-    const date = this.getLastSaturday(query.date);
+    const date = DateUtil.getLastSaturday(query.date);
 
     this.pricesRepository.init().findByDate(date);
 
@@ -32,38 +33,9 @@ export class FuelsService {
       meta: {
         source: 'https://micm.gob.do',
         updatedAt: data[0] ? data[0].updatedAt : null,
-        week: this.getDateWeekNumber(date),
-        year: this.getDateYear(date),
+        week: DateUtil.getIsoWeek(query.date),
+        year: DateUtil.getYear(query.date),
       },
     };
-  }
-
-  private getLastSaturday(date: Date = new Date()): Date {
-    const SATURDAY_WEEK_DAY = 6;
-
-    if (SATURDAY_WEEK_DAY === date.getDay()) {
-      return date;
-    }
-
-    const time = date.getDate() + (7 - date.getDay() - 1) - 7;
-    date.setDate(time);
-
-    return date;
-  }
-
-  private getDateWeekNumber(date: Date = new Date()) {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear =
-      (date.valueOf() - firstDayOfYear.valueOf()) / 86400000;
-
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7) - 1;
-  }
-
-  private getDateYear(date: Date = new Date()) {
-    return date.getFullYear();
-  }
-
-  private getLastUpdatedDate(date: Date = new Date()) {
-    return new Date(date).toISOString();
   }
 }

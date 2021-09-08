@@ -15,6 +15,9 @@
       ],
       "@constants/*": [
         "src/constants/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
       ]
     },
     "module": "commonjs",
