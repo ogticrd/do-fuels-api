@@ -36,6 +36,7 @@ class PriceDto {
   @Expose()
   @IsNumber()
   @ApiProperty()
+  @Transform(({ value }) => parseFloat(value).toFixed(2))
   price: number;
 
   @Expose()
