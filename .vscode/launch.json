@@ -15,7 +15,8 @@
                 "${workspaceFolder}/src/main.ts"
             ],
             "autoAttachChildProcesses": true,
-            
+            "console": "integratedTerminal",
+            "sourceMaps": true,
         },
         {
             "name": "Debug Jest Tests",
