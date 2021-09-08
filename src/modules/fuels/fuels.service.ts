@@ -26,14 +26,12 @@ export class FuelsService {
 
     const data = await this.pricesRepository.search(limit);
 
-    const updatedAt = (data[0] && data[0].publicationDate) || new Date();
-
     return {
       valid: true,
       data,
       meta: {
         source: 'https://micm.gob.do',
-        updatedAt,
+        updatedAt: data[0] ? data[0].updatedAt : null,
         week: this.getDateWeekNumber(date),
         year: this.getDateYear(date),
       },
@@ -54,12 +52,11 @@ export class FuelsService {
   }
 
   private getDateWeekNumber(date: Date = new Date()) {
-    const today = date;
-    const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
     const pastDaysOfYear =
-      (today.valueOf() - firstDayOfYear.valueOf()) / 86400000;
+      (date.valueOf() - firstDayOfYear.valueOf()) / 86400000;
 
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7) - 1;
   }
 
   private getDateYear(date: Date = new Date()) {

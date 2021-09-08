@@ -6,7 +6,6 @@
             "request": "launch",
             "name": "API",
             "runtimeArgs": [
-                "--nolazy",
                 "-r",
                 "ts-node/register",
                 "-r",
@@ -16,6 +15,7 @@
                 "${workspaceFolder}/src/main.ts"
             ],
             "autoAttachChildProcesses": true,
+            
         },
         {
             "name": "Debug Jest Tests",
