@@ -32,6 +32,7 @@
     "class-validator": "^0.13.1",
     "compression": "^1.7.4",
     "helmet": "^4.6.0",
+    "moment": "^2.29.1",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -73,7 +74,8 @@
       "@common/(.*)": "<rootDir>/common/$1",
       "@modules/(.*)": "<rootDir>/modules/$1",
       "@database/(.*)": "<rootDir>/database/$1",
-      "@constants/(.*)": "<rootDir>/constants/$1"
+      "@constants/(.*)": "<rootDir>/constants/$1",
+      "@utils/(.*)": "<rootDir>/utils/$1"
     },
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
