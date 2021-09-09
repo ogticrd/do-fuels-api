@@ -1,8 +1,8 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 
+import { DatabaseModule } from '@database/database.module';
 import { FuelsModule } from '@modules/fuels/fuels.module';
-import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
