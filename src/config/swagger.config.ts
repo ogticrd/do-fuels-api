@@ -1,8 +1,8 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 
-const title = 'Transparency';
-const description = 'Transparency api definition.';
+const title = 'DO Fuels API';
+const description = 'DO Fuels API definition ⛽️.';
 
 /**
  * Setup swagger in the application boostrap
