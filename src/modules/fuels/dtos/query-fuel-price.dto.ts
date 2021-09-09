@@ -1,6 +1,5 @@
 import { IsDate, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 
 export class QueryFuelPriceDto {
   @IsOptional()
@@ -8,7 +7,10 @@ export class QueryFuelPriceDto {
   @ApiProperty({
     required: false,
     type: Date,
-    description: 'Format: YYYY-MM-DD',
+    description:
+      'Price effective date. This parameter allows a search through the effective price date.',
+    example: '2021-01-01',
+    format: 'YYYY-MM-DD',
   })
   readonly date: Date;
 
@@ -17,7 +19,10 @@ export class QueryFuelPriceDto {
   @ApiProperty({
     required: false,
     type: Date,
-    description: 'Format: YYYY-MM-DD',
+    description:
+      'Since price effective date. This parameter allows a search through the effective price date.',
+    example: '2021-01-01',
+    format: 'YYYY-MM-DD',
   })
   readonly since: Date;
 
@@ -26,12 +31,21 @@ export class QueryFuelPriceDto {
   @ApiProperty({
     required: false,
     type: Date,
-    description: 'Format: YYYY-MM-DD',
+    description:
+      'Until price effective date. This parameter allows a search through the effective price date.',
+    example: '2021-02-02',
+    format: 'YYYY-MM-DD',
   })
   readonly until: Date;
 
   @IsOptional()
   @IsString()
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    required: false,
+    type: String,
+    description:
+      'Fuel code. This parameter allows a search through the fuel code',
+    example: 'PGACU00',
+  })
   readonly code: string;
 }
