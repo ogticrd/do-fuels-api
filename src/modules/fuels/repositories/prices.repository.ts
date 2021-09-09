@@ -34,6 +34,15 @@ export class PricesRepository extends AbstractRepository<Price> {
     return this;
   }
 
+  findByDateRanges(since: Date, until: Date) {
+    this.queryBuilder.andWhere('date between :since and :until', {
+      since,
+      until,
+    });
+
+    return this;
+  }
+
   async search(limit?: number) {
     return await this.queryBuilder.limit(limit).getMany();
   }

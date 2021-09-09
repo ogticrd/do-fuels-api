@@ -55,13 +55,17 @@ class FuelPriceMetaDto {
   @Expose()
   @ApiProperty()
   @IsDateString()
-  @Transform(({ value }) => new Date(value).toISOString())
   updatedAt: Date;
 
   @Expose()
   @ApiProperty()
   @IsNumber()
   week: number;
+
+  @Expose()
+  @ApiProperty()
+  @IsNumber()
+  year: number;
 }
 
 @Exclude()
