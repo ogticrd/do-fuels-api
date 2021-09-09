@@ -1,9 +1,18 @@
 import { Controller, Get, Query, UseInterceptors } from '@nestjs/common';
 
-import { QueryFuelPriceDto, ResponseFuelPriceDto } from './dtos';
+import {
+  BadRequestResponseDto,
+  QueryFuelPriceDto,
+  ResponseFuelPriceDto,
+} from './dtos';
+import {
+  ApiBadGatewayResponse,
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { TransformInterceptor } from '@common/interceptors';
 import { FuelsService } from './fuels.service';
-import { ApiTags } from '@nestjs/swagger';
 
 @Controller({
   path: 'fuels',
@@ -15,6 +24,8 @@ export class FuelsController {
 
   @Get()
   @UseInterceptors(new TransformInterceptor(ResponseFuelPriceDto))
+  @ApiOkResponse({ type: ResponseFuelPriceDto })
+  @ApiBadRequestResponse({ type: BadRequestResponseDto })
   getFuelPrices(@Query() query?: QueryFuelPriceDto) {
     return this.fuelsService.getFuelPrices(query);
   }

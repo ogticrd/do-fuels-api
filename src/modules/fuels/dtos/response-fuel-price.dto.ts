@@ -1,4 +1,10 @@
-import { IsNumber, IsDateString, IsString, IsBoolean } from 'class-validator';
+import {
+  IsNumber,
+  IsDateString,
+  IsString,
+  IsBoolean,
+  IsArray,
+} from 'class-validator';
 import { Exclude, Expose, Type, Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -71,17 +77,23 @@ class FuelPriceMetaDto {
 @Exclude()
 export class ResponseFuelPriceDto {
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ type: Boolean })
   @IsBoolean()
   valid: boolean;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ type: FuelPriceMetaDto })
   @Type(() => FuelPriceMetaDto)
   meta: FuelPriceMetaDto;
 
   @Expose()
-  @ApiProperty()
+  @IsArray()
+  @ApiProperty({
+    type: PriceDto,
+    isArray: true,
+    maxLength: 1104,
+    minLength: 23,
+  })
   @Type(() => PriceDto)
-  data: PriceDto;
+  data: PriceDto[];
 }
