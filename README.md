@@ -85,6 +85,10 @@ Este servicio es un [wrapper](https://es.quora.com/Qu%C3%A9-es-exactamente-un-wr
 
 La información expuesta a través de este servicio proviene del RSS público expuesto por el **MICM** que normalmente se actualiza todos los viernes. En ocasiones, esta fuente de información tarda en actualizarse, por lo que este servicio puede presentar retraso en la exposción de la información.
 
+## Dependencias
+
+Este proyecto requiere de un [cron-job](https://github.com/opticrd/do-fuels-cron) que inserta la información en la base de datos semanal.
+
 ## Autores
 
 Septiembre 2021
