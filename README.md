@@ -21,8 +21,6 @@
 
 Este servicio es un [wrapper](https://es.quora.com/Qu%C3%A9-es-exactamente-un-wrapper-API-Y-en-qu%C3%A9-se-diferencia-de-solo-una-API) del RSS de los precios de combustibles dominicanos del [Ministerio de Industria, Comercio y Mypimes (MICM)](https://www.micm.gob.do/).
 
-> Cada imagen incluye la marca de agua de la OGTIC.
-
 ## Referencia del servicio
 
 - [Documentación oficial](https://developers.digital.gob.do)
