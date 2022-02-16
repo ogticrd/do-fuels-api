@@ -1,12 +1,12 @@
-# Territorial Division API RESTful
+# DO Fuels prices API RESTful
 
-This API RESTful exposes the territorial division information of the Dominican Republic provided by the ONE.
+This API RESTful exposes the prices of the Dominican Republic provided fuels by the MICM.
 
 ## Open Endpoints
 
 Open endpoints require no Authentication.
 
-## Territorial Division: ``/v1/fuels``
+## Fuels prices: ``/v1/fuels``
 
 * **Prices** : `GET /v1/fuels`
 
