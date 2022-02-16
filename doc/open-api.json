@@ -1,0 +1,213 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/v1/fuels": {
+            "get": {
+                "operationId": "getFuelPrices",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "required": false,
+                        "in": "query",
+                        "description": "Price effective date. This parameter allows a search through the effective price date.",
+                        "example": "2021-01-01",
+                        "schema": {
+                            "format": "YYYY-MM-DD",
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "since",
+                        "required": false,
+                        "in": "query",
+                        "description": "Since price effective date. This parameter allows a search through the effective price date.",
+                        "example": "2021-01-01",
+                        "schema": {
+                            "format": "YYYY-MM-DD",
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "until",
+                        "required": false,
+                        "in": "query",
+                        "description": "Until price effective date. This parameter allows a search through the effective price date.",
+                        "example": "2021-02-02",
+                        "schema": {
+                            "format": "YYYY-MM-DD",
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "required": false,
+                        "in": "query",
+                        "description": "Fuel code. This parameter allows a search through the fuel code",
+                        "example": "PGACU00",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseFuelPriceDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Fuel Prices"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Dominican Fuels prices API",
+        "description": "This API expose the dominican fuel prices from 2010 to date.",
+        "version": "v1",
+        "contact": {
+            "name": "OGTIC",
+            "url": "https://ogtic.gob.do",
+            "email": "info@ogtic.gob.do"
+        }
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+        "schemas": {
+            "FuelPriceMetaDto": {
+                "type": "object",
+                "properties": {
+                    "source": {
+                        "type": "string"
+                    },
+                    "updatedAt": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "week": {
+                        "type": "number"
+                    },
+                    "year": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "source",
+                    "updatedAt",
+                    "week",
+                    "year"
+                ]
+            },
+            "PriceDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "currency": {
+                        "type": "number"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "date": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "code",
+                    "currency",
+                    "price",
+                    "date"
+                ]
+            },
+            "ResponseFuelPriceDto": {
+                "type": "object",
+                "properties": {
+                    "valid": {
+                        "type": "boolean"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/FuelPriceMetaDto"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PriceDto",
+                            "maxLength": 1104,
+                            "minLength": 23
+                        }
+                    }
+                },
+                "required": [
+                    "valid",
+                    "meta",
+                    "data"
+                ]
+            },
+            "Data": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "default": 400
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "statusCode",
+                    "message",
+                    "timestamp"
+                ]
+            },
+            "BadRequestResponseDto": {
+                "type": "object",
+                "properties": {
+                    "valid": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Data"
+                    }
+                },
+                "required": [
+                    "valid",
+                    "data"
+                ]
+            }
+        }
+    }
+}
