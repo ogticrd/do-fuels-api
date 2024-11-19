@@ -1,24 +1,9 @@
 {
   "compilerOptions": {
     "paths": {
-      "@modules/*": [
-        "./src/modules/*"
-      ],
-      "@database/*": [
-        "./src/database/*"
-      ],
-      "@common/*": [
-        "./src/common/*"
-      ],
-      "@config/*": [
-        "./src/config/*"
-      ],
-      "@constants/*": [
-        "src/constants/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ]
+      "@common/*": ["src/common/*"],
+      "@v1/*": ["src/modules/v1/*"],
+      "@core/*": ["src/core/*"],
     },
     "module": "commonjs",
     "declaration": true,

@@ -1,0 +1,35 @@
+services:
+  database:
+    image: postgres:latest
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - database_volume:/var/lib/postgresql/data
+    restart: on-failure
+    networks:
+      - fuels_network
+
+  api:
+    image: fuels-api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - fuels_network
+    depends_on:
+      - database
+    restart: on-failure
+
+volumes:
+  database_volume:
+    driver: local
+
+networks:
+  fuels_network:
+    driver: bridge

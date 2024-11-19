@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next",
+    "vivaxy.vscode-conventional-commits",
+    "ryanluker.vscode-coverage-gutters",
+    "ms-azuretools.vscode-docker",
+    "mikestead.dotenv",
+    "usernamehw.errorlens",
+    "nhoizey.gremlins",
+    "xabikos.javascriptsnippets",
+    "firsttris.vscode-jest-runner",
+    "pkief.material-icon-theme",
+    "christian-kohler.path-intellisense",
+    "wayou.vscode-todo-highlight",
+    "redhat.vscode-yaml",
+    "aaron-bond.better-comments"
+  ]
+}

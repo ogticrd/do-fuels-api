@@ -1,64 +1,66 @@
-#####################################
-##           Dependencies          ##
-#####################################
-# Install dependencies only when needed
-FROM node:lts-alpine AS deps
+# syntax=docker/dockerfile:1
+# ===================== Create base stage =====================
+ARG NODE_VERSION=lts
+ARG WORK_DIR=/app
+FROM node:${NODE_VERSION}-slim AS base
 
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+ARG WORK_DIR
+ARG APP_ENV=production
 
-WORKDIR /app
-# copy the package.json to install dependencies
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+ARG PORT=80
+ENV WORK_DIR=${WORK_DIR}
 
-#####################################
-##               Build             ##
-#####################################
-FROM node:lts-alpine as builder
+WORKDIR ${WORK_DIR}
 
-# get the node environment to use
-ARG NODE_ENV
-ENV NODE_ENV ${NODE_ENV:-production}
+# Install corepack and set pnpm as default package manager
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
-# some projects will fail without this variable set to true
-ARG SKIP_PREFLIGHT_CHECK
-ENV SKIP_PREFLIGHT_CHECK ${SKIP_PREFLIGHT_CHECK:-false}
-ARG DISABLE_ESLINT_PLUGIN
-ENV DISABLE_ESLINT_PLUGIN ${DISABLE_ESLINT_PLUGIN:-false}
-# App specific build time variables (not always needed)
-ARG REACT_APP_API_URL
-ARG REACT_APP_API_URL ${REACT_APP_API_URL:-http://localhost}
+# Install wget
+RUN apt-get update \
+    && apt-get install -y ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+# ===================== Install Deps =====================
+FROM base AS deps
 
-# build app for production with minification
+COPY package.json pnpm-lock.yaml ./
+# By caching the content-addressable store we stop downloading the same packages again and again
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+# ===================== Build Stage =====================
+# Rebuild the source code only when needed
+FROM base AS build
+
+COPY --from=deps ${WORK_DIR}/node_modules ./node_modules
 COPY . .
-COPY --from=deps /app/node_modules ./node_modules
-RUN yarn build
 
-#####################################
-##               Release           ##
-#####################################
-FROM node:lts-alpine as release
+RUN npm run build
 
-RUN apk add --no-cache dumb-init
+# Only production dependencies will be installed
+ENV NODE_ENV=${APP_ENV}
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --ignore-scripts
 
-# get the node environment to use
-ARG NODE_ENV
-ENV NODE_ENV ${NODE_ENV:-development}
+# ===================== App Runner Stage =====================
+FROM base AS runner
 
-ENV PORT 3000
-ENV HOST 0.0.0.0
+RUN addgroup --gid 1001 --system nodejs && \
+    adduser --system --no-create-home --uid 1001 nestjs
 
-WORKDIR /app
+COPY --from=build --chown=nestjs:nodejs ${WORK_DIR}/node_modules ./node_modules
+COPY --from=build --chown=nestjs:nodejs ${WORK_DIR}/package.json ./package.json
+COPY --from=build --chown=nestjs:nodejs ${WORK_DIR}/dist ./dist
 
-USER node
-
-COPY --from=builder --chown=node:node /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+USER nestjs
 
 EXPOSE ${PORT}
 
-CMD ["dumb-init", "node", "dist/main.js"]
+ENV PORT=${PORT}
+ENV HOSTNAME=0.0.0.0
+ENV TZ=America/Santo_Domingo
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/health || exit 1
+
+CMD [ "node", "dist/main.js" ]
